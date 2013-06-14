@@ -1,0 +1,294 @@
+// Place all the styles related to the Hints controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.wrap_hint {
+		
+	margin-top: 20px;
+	border: 1px solid #CCC;	
+	border-radius: 3px;
+	background-color: #f5f3f3;
+	overflow: hidden;
+
+	.left_sidebar {
+		
+		width: 183px;
+		float: left;
+
+		ul {
+			margin:	0px 0px 0px 0px;
+			padding: 0px;
+			width: 180px;
+			border-right: 3px solid #ccc;
+
+			li{
+				border-bottom: 3px solid #CCC;
+				height: 40px;
+				position: relative;
+				opacity: 0.75;
+				
+				.current{
+					background-color: #256cd4;
+					color: white;
+				}
+
+				a{
+					font-weight: 600;
+					color: #3A3A3C;
+					float: left;
+					padding: 10px 0px 0px 20px;
+					cursor: pointer;
+					width: 160px;
+					height: 30px;
+					text-align: left;
+
+					.current{
+						color: #f7941e;
+					}
+				}
+
+				img{	
+					max-width: 34px;
+					max-height: 32px;
+					position: absolute;
+				    right: 15px;
+				    top: 7px;
+				}
+			}
+		}
+
+		.bottom-img-container {
+			width: 183px;
+		}
+	}
+
+	.right_container {
+		width: 785px;
+		float: left;
+
+		h2, h3 {
+			margin: 10px 50px;
+		}		
+
+		form {
+			margin: 20px 50px;
+		}
+
+		.games_list {
+			overflow: hidden;
+
+			ul {
+				overflow: hidden;
+				padding: 0;
+				margin: 20px 35px 20px 38px;
+
+				li {
+					overflow: hidden;
+					border: 1px solid #abb6c0;
+					background-color: #fcfcfc;
+					width: 700px;
+					float: none;
+					border-radius: 3px;
+					margin-bottom: 10px;
+
+					.game_info {
+						width: 125px;
+						float: left;
+						font-size: 13px;
+						padding: 9px 6px 6px 6px;
+					}
+					.game_result_hint {
+						width: 360px;
+						float: left;
+						border-left: 1px solid #ccc;
+						border-right: 1px solid #ccc;
+						
+						input[type="text"] {
+							width: 25px;
+							height: 25px;
+							padding: 0px 0px;
+							float: left;
+							margin: 6px 10px 0px 10px;
+							font-size: 25px;
+							text-align: center;
+						}
+
+						input[type="button"] {
+							padding: 5px 15px 5px 15px;
+						}
+
+						.flag_placar {
+							padding: 5px 35px 0px 35px;
+							overflow: hidden;
+							width: 195px;
+							float: left;
+
+							img {
+								float: left;
+							}
+
+							label {
+								float: left;
+								margin: 10px 3px 0px 3px;
+							}
+						}
+
+						.save_placar {
+							float: left;
+							padding: 8px 5px 0px 0px;
+						}
+
+						.flag_abbrev {
+							float: left;
+							overflow: hidden;
+							margin-bottom: 5px;
+						}
+						
+						.hint_process_saved {
+							font-size: 12px;
+							font-family: 'Museo300';
+							color: #298037;
+							margin-left: 38px;
+							opacity: 0;
+							cursor: default;
+						}
+
+						.not_saved_error {
+							color: #f40000;
+						}
+					}
+					.game_counting {
+						width: 189px;
+						float: left;
+						padding: 6px 0px 0px 6px;
+						font-size: 13px;
+					}
+				}
+			}
+		}
+
+		.hints_list {
+			overflow: hidden;
+			padding: 0px !important;
+
+			ul {
+				overflow: hidden;
+				padding: 0px 30px 0px 30px;
+				margin: 20px 35px 20px 38px;
+
+				li {
+					overflow: hidden;
+					border: 1px solid #abb6c0;
+					background-color: #fcfcfc;
+					width: 568px;
+					float: none;
+					border-radius: 3px;
+					margin-bottom: 10px;
+				
+					.game_result_hint {
+						width: 300px;
+						float: left;
+						border-right: 1px solid #ccc;
+						
+						span {
+							width: 25px;
+							height: 30px;
+							float: left;
+							margin: 5px 10px 0px 10px;
+							font-size: 25px;
+							text-align: center;
+							border: 1px solid #ccc;
+							border-radius: 3px;
+							background-color: #dce1ee;
+							cursor: default;
+						}
+
+						.flag_placar {
+							padding: 5px 35px 0px 35px;
+							overflow: hidden;
+							width: 200px;
+							float: left;
+
+							img {
+								float: left;
+							}
+
+							label {
+								float: left;
+								margin: 10px 3px 0px 3px;
+							}
+						}
+						
+						.flag_abbrev {
+							float: left;
+							overflow: hidden;
+							margin-bottom: 5px;
+
+							.first_abbrev_name {
+								margin-left: 36px;
+							}
+
+							.sec_abbrev_name {
+								margin-left: 112px;
+							}
+						}
+					}
+
+					.game_counting {
+						width: 247px;
+						float: left;
+						padding: 25px 10px 0px 10px;
+						font-size: 13px;
+
+						label {
+							font-size: 14px;
+							color: #0021a3;
+							font-variant: small-caps;
+							text-transform: uppercase;
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}
+
+label#first {
+	margin-left: 39px;
+}
+
+label#last {
+	margin-left: 119px;
+}
+
+label#status {
+	font-size: 18px;
+	color: #01A300;
+	font-variant: small-caps;
+	text-transform: uppercase;
+	margin-left: 55px;
+	margin-bottom: 15px;
+}
+
+.closedStatus{
+	color: #f40000 !important;
+}
+
+.status_hint_header {
+	position: absolute;
+	right: 30px;
+	color: #fff;
+	font-variant: small-caps;
+	text-transform: uppercase;
+}
+
+#accordion {
+	margin: 10px 40px;
+
+	h3 {
+		font-family: 'Museo300';
+		font-size: 13px;
+		margin: 0px;
+	}
+}

@@ -1,0 +1,41 @@
+#bottom {
+	background: #283891;
+	height: 80px;
+	margin: 16px auto;
+	font-family: 'Calibri';
+}
+
+#bottom .wrap ul {
+	float: right;
+	padding-top: 20px;
+	margin: 0px;
+	width: auto;
+}
+
+#bottom .wrap ul li{
+	float: left;
+	padding: 10px 20px 10px 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+#bottom .wrap ul li:hover {
+	background-color: #288fd8;
+}
+
+#bottom .wrap ul li a:link, a:visited, a:active{
+	text-decoration: none;
+	color: #fff;
+}
+
+#bottom .wrap .copyright {	
+	float: left;
+	margin-top: 7px;
+	color: #fff;
+}
+
+#bottom .wrap .copyright p{
+	font-size: 13px;
+	padding-bottom: 2px;
+	margin: 0px;
+}

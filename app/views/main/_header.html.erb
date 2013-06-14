@@ -1,0 +1,33 @@
+<div id="header">
+  <% if !@user.nil? %>
+    <div id="logoutcontainer"> 
+      <a id="userlogged" href="<%=hints_path%>" title="Página de Palpites"><%=@user.name%>&nbsp;<%=@user.lastname%></a>
+      <a href="<%=logout_path%>" id="logout" alt="Sair" title="Sair">Sair</a>
+    </div>
+  <%end%>
+    
+  <div class="wrap">
+    <a href="<%=login_path%>" id="login" alt="Entrar" title="Login"></a>
+    <div class="top">
+      <div class="mid">
+        <a href="/" class="logo" alt="Bolão dos TOAs" title="Bolão da Copa das Confederações"></a>
+      </div>
+      <div id="menu">
+        <div>
+          <h3>
+            Bolão da Galera!
+          </h3>
+          <h4>
+            Copa das Confederações 2013
+          </h4>
+        </div>
+        <ul>
+          <li><a href="<%=index_path%>"><p>O Bolão</p></a></li>
+          <li><a href="<%=regras_path%>"><p>Regras</p></a></li>
+          <li><a href="<%=cadastro_path%>"><p>Cadastro</p></a></li>
+          <li><a href="<%=ranking_path%>"><p>Ranking</p></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

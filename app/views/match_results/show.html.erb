@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @match_result.game_id %>
+</p>
+
+<p>
+  <b>Team:</b>
+  <%= @match_result.team_id %>
+</p>
+
+<p>
+  <b>Goals:</b>
+  <%= @match_result.goals %>
+</p>
+
+
+<%= link_to 'Edit', edit_match_result_path(@match_result) %> |
+<%= link_to 'Back', match_results_path %>
+
+<style type="text/css">
+  body {
+    background-color: #CCC;
+  }
+</style>

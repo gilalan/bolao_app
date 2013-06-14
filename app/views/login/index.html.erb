@@ -1,0 +1,23 @@
+<div id="login_content">
+	
+	<h2>Acesso ao Sistema</h2>
+
+	<%=form_for :user, :url => url_for(:controller => :login, :action => :do_login), html: {class: "form-horizontal"} do |f| %>
+		<% if flash[:notice] %>
+	     	<div class="flash-notice"><span><%= flash[:notice] %></span></div>
+	    <% end %>
+	    <% if flash[:error] %>
+	     	<div class="flash-error"><span><%= flash[:error] %></span></div>
+	    <% end %>
+
+		<div id="div_id_email" class="control-group">
+			<%=f.text_field :email, :placeholder => "Seu Email" %>
+		</div>
+
+		<div id="div_id_password" class="control-group">
+			<%=f.password_field :password, :placeholder => "Sua Senha" %>
+		</div>
+
+		<input class="submit_btn blue_qdt_input" type="submit" value="Entrar"/>
+	<% end %>
+</div>

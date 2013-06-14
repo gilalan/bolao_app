@@ -1,0 +1,48 @@
+<%= form_for(@game) do |f| %>
+  <% if @game.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+      <ul>
+      <% @game.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field">
+    <%= f.label :local %><br />
+    <%= f.text_field :local %>
+  </div>
+  <div class="field">
+    <%= f.label :gamedate %><br />
+    <%= f.date_select :gamedate %>
+  </div>
+  <div class="field">
+    <%= f.label :gametime %><br />
+    <%= f.time_select :gametime %>
+  </div>
+  <div class="field">
+    <%= f.label :computed %><br />
+    <%= f.check_box :computed %>
+  </div>
+  <div class="field">
+    <%= f.label :closed %><br />
+    <%= f.check_box :closed %>
+  </div>
+  <div class="field">
+    <%= f.label :finished %><br />
+    <%= f.check_box :finished %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<style type="text/css">
+  body {
+    background-color: #CCC;
+  }
+</style>

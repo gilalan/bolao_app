@@ -1,0 +1,222 @@
+<div class="wrap_hint">
+  <%= render :partial => 'left_sidebar', :locals => {:user_id => @user.id, :var_control => '1'} %>
+  <div class="right_container">
+    <div class="games_list">
+      <ul>
+        <% @games.each do |game| %>
+          <li>
+            <div class="game_info">
+              <% dateofgame = game.gamedate 
+                 timeofgame = game.gametime
+              %>
+              <input id= "date_<%=game.id%>" type="hidden" year="<%=dateofgame.year%>" month="<%=dateofgame.month%>" day="<%=dateofgame.day%>" hour="<%=timeofgame.hour%>" minutes="<%=timeofgame.min%>"/>
+              <span><%=l game.gamedate, :format => :complete%></span><br>
+              <span><%=l game.gametime, :format => :smallshort%></span><br>
+              <span> <%=game.local%> </span>
+            </div>
+            <div class="game_result_hint">
+              <div class="flag_placar">
+                <img src="<%=asset_path(game.match_results.first.team.logotipo.to_s)%>"/>
+                <% hometeamid = game.match_results.first.team.id %>
+                <% awayteamid = game.match_results.last.team.id %>
+                <% unless game.hints.nil? && game.hints.empty?
+                    arraymatchhomehints = game.hints.find_all_by_user_id_and_team_id(@user.id, hometeamid)
+                    arraymatchawayhints = game.hints.find_all_by_user_id_and_team_id(@user.id, awayteamid)
+                  end
+                  unless arraymatchhomehints.nil? && arraymatchhomehints.empty?
+                    unless arraymatchhomehints.first.nil? 
+                      homegoals = arraymatchhomehints.first.goals
+                    end
+                  end
+                  unless arraymatchawayhints.nil? && arraymatchawayhints.empty?
+                    unless arraymatchawayhints.first.nil? 
+                      awaygoals = arraymatchawayhints.first.goals
+                    end
+                  end
+                %>
+                <input class="goal_first" gameid="<%=game.id%>" teamid="<%=hometeamid%>" type="text" value="<%=homegoals%>"/>
+                <label>X</label>
+                <input class="goal_last" gameid="<%=game.id%>" teamid="<%=awayteamid%>" type="text" value="<%=awaygoals%>"/>
+                <img src="<%=asset_path(game.match_results.last.team.logotipo.to_s)%>"/>
+              </div>
+              <div class="save_placar">
+                <input type="button" class="save_hint submit_btn blue_qdt_input" value="Salvar"/>
+              </div>
+              <div class="flag_abbrev">
+                <label id="first"> <%=game.match_results.first.team.abbrev%> </label>
+                <label id="last"> <%=game.match_results.last.team.abbrev%> </label>
+                <span class="hint_process_saved">Palpite Salvo!</span>
+              </div>
+            </div>
+            <div class="game_counting">
+              <label id="status" gameid="<%=game.id%>">Aberto</label><br>
+              <span>Fecha <%=l game.gamedate, :format => :default%> às <%=l game.gametime-30.minutes, :format => :smallshort%></span>              
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(function() {
+
+  checkHintStatus();
+
+  function saveHints (inpt) {
+
+    var hints = [];
+
+    var game_id = jQuery(inpt.parent().prev().find(':input')[0]).attr('gameid');
+    
+    if (checkDates(game_id)) {
+
+      alert("Não é possível salvar o palpite pois o tempo limite já expirou.");
+      
+    } else {
+
+      var hint1 = {
+        userid: "<%=@user.id%>",
+        teamid: jQuery(inpt.parent().prev().find(':input')[0]).attr('teamid'),
+        gameid: game_id,
+        goals: inpt.parent().prev().find(':input')[0].value
+      };
+
+      var hint2 = {
+        userid: "<%=@user.id%>",
+        teamid: jQuery(inpt.parent().prev().find(':input')[1]).attr('teamid'),
+        gameid: game_id,
+        goals: inpt.parent().prev().find(':input')[1].value
+      };
+      
+      hints.push(hint1);
+      hints.push(hint2);
+
+      var saved = sendHints(inpt, hints);
+
+      return saved;
+    }
+  }
+
+  function sendHints (inpt, arrayhints) {
+
+    jQuery.ajax('<%=save_hint_path%>',{
+      data : getJSONFromHere(arrayhints),
+      success : function (data, textStatus, jqXHR) {
+
+        //Tiver que tirar lá de baixo no evento do btn.
+        showProcessedMsg(inpt, data.saved);
+
+        if (data.saved) {
+          return true          
+
+        } else {
+          return false
+        }
+      }      
+    });
+
+  }
+
+  function getJSONFromHere(arrayhints) {
+    
+    var hint = {
+      array_hints: arrayhints
+    }
+
+    return hint;
+  }
+
+  function checkHintStatus () {
+    console.log("checked");
+    
+    var jLabel;
+    var game_id;
+    
+
+    statusArray = jQuery(".game_counting").find("label");
+    jQuery.each(statusArray, function(index, value) {
+      jLabel = jQuery(value);
+      game_id = jLabel.attr('gameid');
+      
+      //Se retornar true, o tempo pro palpite expirou             
+      if (checkDates(game_id)) {
+        
+        if (!jLabel.hasClass("closedStatus")){
+          jLabel.addClass("closedStatus");
+          jLabel.text("Fechado");
+          //Localizar as inputs e desabilita-las
+          jQuery(jLabel.parent().prev().find(":input")[0]).prop('disabled', true);
+          jQuery(jLabel.parent().prev().find(":input")[1]).prop('disabled', true);
+          jQuery(jLabel.parent().prev().find(":input")[2]).hide();
+          //jQuery(jQuery(".goal_first")[0]).prop('disabled', true)
+
+        }
+      }
+
+    });
+  }
+
+  //Se retornar true, o tempo pro palpite expirou
+  function checkDates(game_id) {
+    
+    var rbdate = jQuery("#date_"+game_id);
+   
+    var jDate = new Date(rbdate.attr('year'), parseInt(rbdate.attr('month'))-1, rbdate.attr('day'), rbdate.attr('hour'), rbdate.attr('minutes'), 0);
+
+    var jCurrentDate = new Date();
+
+    return checkExpiredHints(jDate, jCurrentDate);
+  }
+
+  function checkExpiredHints(gameDate, currentDate) {
+
+    var minutesCount = (gameDate - currentDate)/60000;//Obtendo os minutos restantes para partida
+    
+    //Tempo expirado para os palpites se retornar true
+    if ( minutesCount < 30)
+      return true
+    else
+      return false
+  }
+
+  function showProcessedMsg(inpt, saved) {    
+    
+    var jSpan = jQuery(inpt.parent().next().find("span")[0]);
+    if (saved) {
+      
+      if (jSpan.hasClass("not_saved_error")) {
+        jSpan.removeClass("not_saved_error");
+        jSpan.text("Palpite Salvo!");
+      }
+
+    } else {
+     
+      jSpan.addClass("not_saved_error");
+      jSpan.text("Erro ao Salvar!");
+    }
+
+    jSpan.fadeTo('fast', 1);
+    
+    setTimeout(function() {
+      jSpan.fadeTo(800, 0);
+    }, 3000);
+
+  }
+
+  //Events
+  jQuery('.save_hint').click(function() {
+    
+    var inpt = jQuery(this);
+    
+    var bool = saveHints(inpt);
+    
+    //console.log("bool do saveHint no evento: ", bool);    
+    
+  });  
+
+  setInterval(checkHintStatus, 100000);
+
+});
+</script>

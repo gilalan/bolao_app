@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Local:</b>
+  <%= @game.local %>
+</p>
+
+<p>
+  <b>Gamedate:</b>
+  <%= @game.gamedate %>
+</p>
+
+<p>
+  <b>Gametime:</b>
+  <%= @game.gametime %>
+</p>
+
+<p>
+  <b>Computed:</b>
+  <%= @game.computed %>
+</p>
+
+<p>
+  <b>Finished:</b>
+  <%= @game.finished %>
+</p>
+
+<p>
+  <b>Closed:</b>
+  <%= @game.closed %>
+</p>
+
+<%= link_to 'New Match Result', game_match_result_path(@game.id) %> |
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>
+
+<style type="text/css">
+  body {
+    background-color: #CCC;
+  }
+</style>

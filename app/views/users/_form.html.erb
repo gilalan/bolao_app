@@ -1,0 +1,46 @@
+<%=form_for(@user, html: {class: "form-horizontal"}) do |f| %>
+    <% if flash[:notice] %>
+        <div class="flash-notice"><span><%= flash[:notice] %></span></div>
+    <% end %>
+    <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <% @status = @user.new_record? ? "cadastrar" : "atualizar" %>
+          <h3><%= pluralize(@user.errors.count, "erro") %> ao <%=@status%> usuário:</h3>
+
+          <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div id="div_id_name" class="control-group">
+        <%=f.text_field :name, :placeholder => "Seu Nome" %>
+    </div>
+
+    <div id="div_id_lastname" class="control-group">
+        <%=f.text_field :lastname, :placeholder => "Seu Sobrenome" %>
+    </div>
+
+    <div id="div_id_email" class="control-group">
+        <%=f.text_field :email, :placeholder => "Seu Email" %>
+    </div>
+
+    <div id="div_id_email" class="control-group">
+        <%=f.text_field :email_confirmation, :placeholder => "Confirme Seu Email" %>
+    </div>
+
+    <% if @user.new_record? %>
+        <div id="div_id_password1" class="control-group">
+            <%=f.password_field :password, :placeholder => "Digite uma senha" %>
+        </div>
+        <div id="div_id_password2" class="control-group">
+            <%=f.password_field :password_confirmation, :placeholder => "Confirme a senha" %>
+        </div>
+    <% end %>
+
+    <div class="actions">
+        <%= f.submit :class => "submit_btn blue_qdt_input" %>
+    </div>
+<% end %>

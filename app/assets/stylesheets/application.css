@@ -1,0 +1,348 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+@font-face {
+	font-family: 'Museo300';
+	src: url('/assets/Museo-300.otf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Museo700';
+	src: url('/assets/Museo-700.otf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Sreda';
+	src: url('/assets/Sreda.otf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Signika-Regular';
+	src: url('/assets/Signika-Regular.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	display: block;
+	margin:	0px;
+	padding: 0px;
+	font-family: 'Museo700', "Arial", "Helvetica";
+}
+
+h2 {
+	margin-top: 30px;
+	font-size: 20px;
+	font-variant: small-caps;
+	border-bottom: 1px solid #ACACAC;
+}
+
+h3 {
+	font-size: 14px;
+	font-family: "Museo", "Calibri", "Arial";
+	color: rgb(80, 80, 80);
+}
+
+ul {
+	list-style: none outside none;
+	overflow: hidden;
+	margin: 0;
+}
+
+li {
+	float: left;
+}
+
+a {
+	text-decoration: none;
+	display: block;
+}
+
+form {
+	font-family: 'Calibri';
+	padding: 5px 1px;
+}
+
+form label {
+			
+}
+
+input[type="submit"], input[type="button"] {
+	display: inline-block;
+	cursor: pointer;
+	border: 1px solid #b5b5b5;
+	border-radius: 4px;
+	margin-left: 0px;
+	padding: 10px 30px 10px 30px;
+	overflow: visible;
+	position: relative;
+	font: 13px/1.5 "Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
+	color: #b80000;
+	background-color: transparent;
+	background: #ebebeb;
+	background: -webkit-linear-gradient(#fff,#ebebeb);
+	background: -moz-linear-gradient(#fff,#ebebeb);
+	background: linear-gradient(#fff,#ebebeb);
+	opacity: .85;
+}
+
+.red_qdt_input {
+	background: #b80000!important;
+	background: -webkit-linear-gradient(#f40000,#b80000)!important;
+	background: -moz-linear-gradient(#f40000,#b80000)!important;
+	background: linear-gradient(#f40000,#b80000)!important;
+	-webkit-border-radius: 4px!important;
+	-moz-border-radius: 4px!important;
+	border-radius: 4px!important;
+	border: 1px solid rgb(133, 50, 50) !important;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	color: #fff!important;
+}
+
+.blue_qdt_input {
+	background: #283891!important;
+	background: -webkit-linear-gradient(#0e76bc,#283891)!important;
+	background: -moz-linear-gradient(#0e76bc,#283891)!important;
+	background: linear-gradient(#0e76bc,#283891)!important;
+	-webkit-border-radius: 4px!important;
+	-moz-border-radius: 4px!important;
+	border-radius: 4px!important;
+	border: 1px solid rgb(63, 60, 131) !important;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.2)!important;
+	color: #fff!important;
+}
+
+input[type="submit"]:hover {
+	opacity: 1;
+}
+
+input[type="button"]:hover {
+	opacity: 1;
+}
+
+.form-search input,.form-inline input,.form-horizontal input[type="text"], .form-horizontal input[type="password"], .form-search textarea,.form-inline textarea,.form-horizontal textarea,.form-search select,.form-inline select,.form-horizontal select,.form-search .help-inline,.form-inline .help-inline,.form-horizontal .help-inline,.form-search .uneditable-input,.form-inline .uneditable-input,.form-horizontal .uneditable-input,.form-search .input-prepend,.form-inline .input-prepend,.form-horizontal .input-prepend,.form-search .input-append,.form-inline .input-append,.form-horizontal .input-append
+{	
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+	zoom: 1;
+	border: 1px solid #ccc;
+	height: 40px;
+	width: 300px;
+	padding: 0 15px 0 15px;
+	font-size: 17px;
+	color: #777;
+	font-weight: 400;
+	background-color: transparent;
+	font-family: "Calibri", sans-serif;
+	border-radius: 3px;
+	-moz-border-radius: 3px; 
+	-webkit-border-radius: 3px;
+	box-shadow: 0 0 0;
+	-moz-box-shadow: 0 0 0;
+	-webkit-box-shadow: 0 0 0;
+}
+
+.form-search textarea,.form-inline textarea,.form-horizontal textarea {
+	height: 200px !important;
+	padding: 10px 15px !important;
+}
+
+.form-search .hide,.form-inline .hide,.form-horizontal .hide
+{
+	display: none;
+}
+
+.form-horizontal .control-group
+{
+	margin-bottom: 10px;
+	zoom: 1;
+}
+.form-horizontal .control-group:before,.form-horizontal .control-group:after
+{
+	content: "";
+	display: table;
+	line-height: 0;
+}
+.form-horizontal .control-group:after
+{
+	clear: both;
+}
+.form-horizontal .control-label
+{
+	float: left;
+	padding-top: 5px;
+	text-align: left;
+	width: 100px;
+}
+.form-horizontal .controls
+{
+	display: inline-block;
+	margin-left: 0;
+	margin-left: 180px;
+	padding-left: 20px;
+}
+.form-horizontal .controls:first-child
+{
+	padding-left: 180px;
+}
+.form-horizontal .help-block
+{
+	margin-bottom: 0;
+}
+.form-horizontal input+.help-block,.form-horizontal select+.help-block,.form-horizontal textarea+.help-block
+{
+	margin-top: 10px;
+}
+.form-horizontal .form-actions
+{
+	padding-left: 180px;
+}
+
+.form-horizontal #error_explanation {
+	margin-bottom: 25px;
+}
+
+.form-horizontal #error_explanation ul {
+	padding-left: 15px;
+	color: #e00404;
+}
+
+.form-horizontal #error_explanation ul li{
+	float: none;
+}
+
+.flash-notice {
+	margin: 5px 0 15px 0;
+}
+
+.flash-notice span {
+	border: 1px solid #ccc;
+	padding: 5px 10px;
+	border-radius: 3px;
+	color: #4B4CA9;
+	background-color: rgb(243, 243, 243);
+}
+
+.flash-error {
+	margin: 5px 0px 15px 0px;
+}
+
+.flash-error span {
+	border: 1px solid #ccc;
+	padding: 5px;
+	border-radius: 3px;
+	color: #e00404 !important;
+}
+
+.container
+{
+	margin-left: auto;
+	margin-right: auto;
+	zoom: 1;
+}
+
+.container:before,.container:after
+{
+	content: "";
+	display: table;
+	line-height: 0;
+}
+.container:after
+{
+	clear: both;
+}
+.container-fluid
+{
+	padding-left: 20px;
+	padding-right: 20px;
+	zoom: 1;
+}
+.container-fluid:before,.container-fluid:after
+{
+	content: "";
+	display: table;
+	line-height: 0;
+}
+.container-fluid:after
+{
+	clear: both;
+}
+
+.container,.navbar-static-top .container,.navbar-fixed-top .container,.navbar-fixed-bottom .container
+{
+	width: 940px;
+}
+
+#main {
+	clear: both;
+	padding-bottom: 5px;
+}
+
+.wrap {
+	overflow: hidden;
+	width: 970px;
+	margin: 0 auto;
+}
+
+a#login{
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	height: 34px;
+	width: 34px;
+	background: url('/assets/login.png') no-repeat;
+	opacity: 0.6;
+}
+
+a#login:hover {
+	opacity: 1;
+}
+
+div#logoutcontainer {
+	display: block;
+	position: absolute;
+	top: 52px;
+	right: 10px;
+	font-size: 16px;
+	font-family: 'Museo300';
+	text-align: right;
+}
+
+span#userlogged {
+	color: white;	
+}
+
+a#logout {
+	color: #73f7f1;
+}
+
+.control-group.required > label:after {
+    content: "*";
+}
+.control-group.required > label {
+    font-weight: bold;
+}
+

@@ -1,0 +1,48 @@
+<div class="left_sidebar">
+	<ul>
+        <li id="myhints_LI" class="current"><a class="current" href="<%=hints_path%>">Meus Palpites</a><img src=""/></li>
+        <li id="edit_LI"><a href="<%=edit_user_path(user_id)%>">Editar Dados</a><img src=""></li>
+        <li id="allhints_LI"><a href="<%=all_hints_path%>">Todos os Palpites</a><img src=""></li>
+        <li id="ranking_LI"><a href="">Ranking</a><img src=""></li>
+     </ul>
+     <div class="bottom-img-container">
+        <img src="<%=asset_path('tatu-bola1.png')%>" alt="Mascote">
+     </div>
+</div>
+
+<script type="text/javascript">
+		
+	jQuery(function() {
+
+		function setCurrentItemLeftMenu(jElement){
+
+	      jElement.addClass("current");
+	      jElement.children(":first-child").addClass("current");	     
+
+	      jElement.siblings().each(function(){
+	        
+	        var currentLI = jQuery(this);
+
+	        if (currentLI.is(".current")){
+
+	          currentLI.removeClass("current");
+	          currentLI.children(":first-child").removeClass("current");
+	        }          
+	      });
+	    }
+
+
+		//Verifica qual valor da variavel :locals => {:var_control} que é submetido na view que renderiza esta partial.
+	    var control = '<%=var_control%>';
+
+	    if (control == '1')
+	      setCurrentItemLeftMenu(jQuery("#myhints_LI"));
+	    else if (control == '2')
+	      setCurrentItemLeftMenu(jQuery("#edit_LI"));
+	    else if (control == '3')
+	      setCurrentItemLeftMenu(jQuery("#allhints_LI"));
+	    else if (control == '4')
+	      setCurrentItemLeftMenu(jQuery("#ranking_LI"));
+	});
+
+</script>
