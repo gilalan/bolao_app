@@ -1,6 +1,6 @@
-<h1>Listing teams</h1>
+<h1>Listando Times</h1>
 
-<table>
+<table class="admin_teams">
   <tr>
     <th>ID</th>
     <th>Name</th>
@@ -12,9 +12,9 @@
 
 <% @teams.each do |team| %>
   <tr>
-    <td><%= team.id %></td>
+    <td><i><%= team.id %></i></td>
     <td><%= team.name %></td>
-    <td><%= team.logotipo %></td>
+    <td><img src="<%=asset_path(team.logotipo.to_s)%>"/></td>
     <td><%= link_to 'Show', team %></td>
     <td><%= link_to 'Edit', edit_team_path(team) %></td>
     <td><%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -24,4 +24,7 @@
 
 <br />
 
-<%= link_to 'New Team', new_team_path %>
+<div class="admin_teams_div">
+  <%= link_to 'New Team', new_team_path %>
+</div>
+

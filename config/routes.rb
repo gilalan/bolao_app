@@ -1,5 +1,5 @@
 BolaoApp::Application.routes.draw do
-  
+
   resources :match_results
   resources :games
   resources :teams
@@ -7,6 +7,8 @@ BolaoApp::Application.routes.draw do
   resources :users
 
   root :to => 'main#index'
+
+  match 'admin/index' => 'admin#index', :as => :admin
 
   match 'index' => 'main#index', :as => :index
   match 'cadastro' => 'main#cadastro', :as => :cadastro
@@ -21,6 +23,11 @@ BolaoApp::Application.routes.draw do
   match 'hints/result/allhints' => 'hints#all_hints', :as => :all_hints  
   match 'hints/result/adminallhints' => 'hints#admin_all_hints', :as => :admin_all_hints
   match 'hints/result/calculator' => 'hints#calculator', :as => :calculator
+  match 'hints/result/get_statistics' => 'hints#get_statistics', :as => :get_statistics
+
+  match 'users/:id/reset_score' => 'users#reset_score', :as => :user_reset_score
+  match 'users/calculate/reset_all_scores' => 'users#reset_all_scores', :as => :reset_all_scores
+  match 'users/calculate/reset_all_hintspoints' => 'users#reset_all_hintspoints', :as => :reset_all_hintspoints
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

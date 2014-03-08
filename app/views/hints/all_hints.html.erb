@@ -5,26 +5,28 @@
   	<h3> Aqui você pode acompanhar os palpites de todos os participantes para as partidas com status encerrado, ou seja, que ninguém mais pode editar o placar do palpite.</h3>
   	
   	<div id="accordion" class="acc-faq">
-    	
-        <% @games.each do |game| %>	          
+    	<% lastAccordionItemClosed = 0 %>
+        <% @games.each_with_index do |game, index| %>
+        	<% game_mr = game.match_results(:order => "team_id ASC") %>	          
         	<% msgStatusHintHeader = game.closed ? "Palpites Encerrados" : "Palpites Disponíveis" %>
 		    <h3><%=l game.gamedate, :format => :complete%>, <%=l game.gametime, :format => :smallshort%>, <%=game.local%><span class="status_hint_header">&nbsp;&nbsp;<%=msgStatusHintHeader%></span></h3>
 		    <% if game.closed %>
+		    	<% lastAccordionItemClosed = index %>
 			    <div class="hints_list">
 			        <ul>
 			        	<% if game.computed %>
 				        	<li style="border: 3px solid rgb(78, 231, 6);">
 						        <div class="game_result_hint">
 					              <div class="flag_placar">
-					                <img src="<%=asset_path(game.match_results.first.team.logotipo.to_s)%>"/>
-					                <span class="goal_first" gameid="<%=game.id%>" teamid="<%=game.match_results.first.team_id%>" type="text"><%=game.match_results.first.goals%></span>
+					                <img src="<%=asset_path(game_mr.first.team.logotipo.to_s)%>"/>
+					                <span class="goal_first" gameid="<%=game.id%>" teamid="<%=game_mr.first.team_id%>" type="text"><%=game_mr.first.goals%></span>
 					                <label>X</label>
-					                <span class="goal_last" gameid="<%=game.id%>" teamid="<%=game.match_results.last.team_id%>" type="text"><%=game.match_results.last.goals%></span>
-					                <img src="<%=asset_path(game.match_results.last.team.logotipo.to_s)%>"/>
+					                <span class="goal_last" gameid="<%=game.id%>" teamid="<%=game_mr.last.team_id%>" type="text"><%=game_mr.last.goals%></span>
+					                <img src="<%=asset_path(game_mr.last.team.logotipo.to_s)%>"/>
 					              </div>
 					              <div class="flag_abbrev">
-					                <label class="first_abbrev_name"> <%=game.match_results.first.team.abbrev%> </label>
-					                <label class="sec_abbrev_name"> <%=game.match_results.last.team.abbrev%> </label>
+					                <label class="first_abbrev_name"> <%=game_mr.first.team.abbrev%> </label>
+					                <label class="sec_abbrev_name"> <%=game_mr.last.team.abbrev%> </label>
 					              </div>
 					            </div>
 					            <div class="game_counting">
@@ -33,45 +35,47 @@
 					        </li>
 				        <% end %>
 			        	<% @users.each do |user| %>
-			        		<li>
-						        <div class="game_result_hint">
-					              <div class="flag_placar"> 
-					              	<% hometeamid = game.match_results.first.team.id %>
-					                <% awayteamid = game.match_results.last.team.id %>
-					                <img src="<%=asset_path(game.match_results.first.team.logotipo.to_s)%>"/>
-					                <%
-					                	unless user.hints.nil? && user.hints.empty?
-					                		homeTeamHint = user.hints.find_by_game_id_and_team_id(game.id, hometeamid);
-					                		awayTeamHint = user.hints.find_by_game_id_and_team_id(game.id, awayteamid);
+			        		<% unless user.typeof == 1 %>
+				        		<li>
+							        <div class="game_result_hint">
+						              <div class="flag_placar"> 
+						              	<% hometeamid = game_mr.first.team.id %>
+						                <% awayteamid = game_mr.last.team.id %>
+						                <img src="<%=asset_path(game_mr.first.team.logotipo.to_s)%>"/>
+						                <%
+						                	unless user.hints.nil? && user.hints.empty?
+						                		homeTeamHint = user.hints.find_by_game_id_and_team_id(game.id, hometeamid);
+						                		awayTeamHint = user.hints.find_by_game_id_and_team_id(game.id, awayteamid);
 
-					                		if homeTeamHint.nil?
-					                			homeTeamHintGoals = ""
-					                		else
-					                			homeTeamHintGoals = homeTeamHint.goals
-					                		end
+						                		if homeTeamHint.nil?
+						                			homeTeamHintGoals = ""
+						                		else
+						                			homeTeamHintGoals = homeTeamHint.goals
+						                		end
 
-											if awayTeamHint.nil?
-					                			awayTeamHintGoals = ""
-					                		else
-					                			awayTeamHintGoals = awayTeamHint.goals
-					                		end			                		
-					                	end
-					                %>
-					                <span class="goal_first" gameid="<%=game.id%>" teamid="<%=hometeamid%>" type="text"><%=homeTeamHintGoals%></span>
-					                <label>X</label>
-					                <span class="goal_last" gameid="<%=game.id%>" teamid="<%=awayteamid%>" type="text"><%=awayTeamHintGoals%></span>
-					                <img src="<%=asset_path(game.match_results.last.team.logotipo.to_s)%>"/>
-					              </div>
-					              <div class="flag_abbrev">
-					                <label class="first_abbrev_name"> <%=game.match_results.first.team.abbrev%> </label>
-					                <label class="sec_abbrev_name"> <%=game.match_results.last.team.abbrev%> </label>
-					              </div>
-					            </div>
-					            <div class="game_counting">
-					              <label gameid="<%=game.id%>"><%=user.name%>&nbsp;<%=user.lastname%></label><br>
-					              <label gameid="<%=game.id%>" style="color: #000;"><%= "#{homeTeamHint.points} pontos" unless homeTeamHint.nil? %></label>
-					            </div>
-					        </li>
+												if awayTeamHint.nil?
+						                			awayTeamHintGoals = ""
+						                		else
+						                			awayTeamHintGoals = awayTeamHint.goals
+						                		end			                		
+						                	end
+						                %>
+						                <span class="goal_first" gameid="<%=game.id%>" teamid="<%=hometeamid%>" type="text"><%=homeTeamHintGoals%></span>
+						                <label>X</label>
+						                <span class="goal_last" gameid="<%=game.id%>" teamid="<%=awayteamid%>" type="text"><%=awayTeamHintGoals%></span>
+						                <img src="<%=asset_path(game_mr.last.team.logotipo.to_s)%>"/>
+						              </div>
+						              <div class="flag_abbrev">
+						                <label class="first_abbrev_name"> <%=game_mr.first.team.abbrev%> </label>
+						                <label class="sec_abbrev_name"> <%=game_mr.last.team.abbrev%> </label>
+						              </div>
+						            </div>
+						            <div class="game_counting">
+						              <label gameid="<%=game.id%>"><%=user.name%>&nbsp;<%=user.lastname%></label><br>
+						              <label gameid="<%=game.id%>" style="color: #000;"><%= "#{homeTeamHint.points} pontos" unless homeTeamHint.nil? %></label>
+						            </div>
+						        </li>
+					        <% end %>
 				        <%end%>
 			        </ul>
 			    </div>
@@ -87,5 +91,10 @@
 <%= javascript_include_tag 'jquery-ui-1.10.3.custom.min' %>
 <%=stylesheet_link_tag 'jquery-ui-1.10.3.custom'%>
 <script type="text/javascript">
+	
 	jQuery("#accordion").accordion({heightStyle: "content", animate: 200});
+
+	var activeItem = parseInt("<%=lastAccordionItemClosed%>");
+	jQuery( "#accordion" ).accordion({ active: activeItem });
+
 </script>

@@ -4,6 +4,7 @@
     <div class="games_list">
       <ul>
         <% @games.each do |game| %>
+          <% game_mr = game.match_results(:order => "team_id ASC") %>
           <li>
             <div class="game_info">
               <% dateofgame = game.gamedate 
@@ -16,9 +17,9 @@
             </div>
             <div class="game_result_hint">
               <div class="flag_placar">
-                <img src="<%=asset_path(game.match_results.first.team.logotipo.to_s)%>"/>
-                <% hometeamid = game.match_results.first.team.id %>
-                <% awayteamid = game.match_results.last.team.id %>
+                <img src="<%=asset_path(game_mr.first.team.logotipo.to_s)%>"/>
+                <% hometeamid = game_mr.first.team.id %>
+                <% awayteamid = game_mr.last.team.id %>
                 <% unless game.hints.nil? && game.hints.empty?
                     arraymatchhomehints = game.hints.find_all_by_user_id_and_team_id(@user.id, hometeamid)
                     arraymatchawayhints = game.hints.find_all_by_user_id_and_team_id(@user.id, awayteamid)
@@ -37,14 +38,15 @@
                 <input class="goal_first" gameid="<%=game.id%>" teamid="<%=hometeamid%>" type="text" value="<%=homegoals%>"/>
                 <label>X</label>
                 <input class="goal_last" gameid="<%=game.id%>" teamid="<%=awayteamid%>" type="text" value="<%=awaygoals%>"/>
-                <img src="<%=asset_path(game.match_results.last.team.logotipo.to_s)%>"/>
+                <img src="<%=asset_path(game_mr.last.team.logotipo.to_s)%>"/>
               </div>
               <div class="save_placar">
                 <input type="button" class="save_hint submit_btn blue_qdt_input" value="Salvar"/>
               </div>
               <div class="flag_abbrev">
-                <label id="first"> <%=game.match_results.first.team.abbrev%> </label>
-                <label id="last"> <%=game.match_results.last.team.abbrev%> </label>
+                <label id="first"> <%=game_mr.first.team.abbrev%> </label>
+                <label class="statistics"> Estatísticas </label>
+                <label id="last"> <%=game_mr.last.team.abbrev%> </label>
                 <span class="hint_process_saved">Palpite Salvo!</span>
               </div>
             </div>
@@ -56,6 +58,26 @@
         <% end %>
       </ul>
     </div>
+    
+    <div id="dialog" title="Estatísticas">
+      <label id="match-hints-computed"></label>
+      <div class="container-progress-bar"> 
+        <label id="home-team-name-stats" class="label-team-name"></label>
+        <div id="progressbar-wins"></div>
+        <label id="home-team-value-stats" class="label-team-stats"></label>
+      </div>
+      <div class="container-progress-bar">
+        <label id="draw-stats" class="label-team-name">Empate</label>
+        <div id="progressbar-draws"></div>
+        <label id="draw-value-stats" class="label-team-stats"></label>
+      </div>
+      <div class="container-progress-bar">
+        <label id="away-team-name-stats" class="label-team-name"></label>
+        <div id="progressbar-defeats"></div>
+        <label id="away-team-value-stats" class="label-team-stats"></label>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -119,6 +141,19 @@ jQuery(function() {
 
   }
 
+  function sendGameID (game_id, gameId) {
+
+    jQuery.ajax('<%=get_statistics_path%>',{
+      data : getJSONStatistics(game_id),
+      success : function (data, textStatus, jqXHR) {
+
+        //Tiver que tirar lá de baixo no evento do btn.
+        showWindowStatistics(data.matches, data.wins, data.draws, data.defeats, data.homeTeam, data.awayTeam);        
+      }      
+    });
+
+  }
+
   function getJSONFromHere(arrayhints) {
     
     var hint = {
@@ -126,6 +161,15 @@ jQuery(function() {
     }
 
     return hint;
+  }
+
+  function getJSONStatistics(gameid) {
+    
+    var gameId = {
+      game_id: gameid
+    }
+
+    return gameId;
   }
 
   function checkHintStatus () {
@@ -205,6 +249,45 @@ jQuery(function() {
 
   }
 
+  function showWindowStatistics(matches, wins, draws, defeats, homeTeam, awayTeam) {
+    console.log("Home Team x Away Team", homeTeam, awayTeam)
+    console.log("Numero de Palpites, Vitorias, Empates, Derrotas: ", matches, wins, draws, defeats);
+    
+    jQuery("#dialog").dialog("open");
+
+    jQuery("#match-hints-computed").text("Foram computados " + matches + " palpites até o momento.");
+
+    jQuery(function() {
+      
+      jQuery("#progressbar-wins").progressbar({
+        value: parseFloat(wins)
+      });
+
+      jQuery("#home-team-name-stats").text(homeTeam);
+      jQuery("#home-team-value-stats").text(wins.toString() + "%");
+      jQuery("#progressbar-wins").addClass("progressbar-bolao");
+      jQuery("#progressbar-wins").find(".ui-progressbar-value").addClass("progressbar-bolao-bar");
+
+      jQuery("#progressbar-draws").progressbar({
+        value: parseFloat(draws)
+      });
+            
+      jQuery("#draw-value-stats").text(draws.toString() + "%");
+      jQuery("#progressbar-draws").addClass("progressbar-bolao");
+      jQuery("#progressbar-draws").find(".ui-progressbar-value").addClass("progressbar-bolao-bar");
+
+      jQuery("#progressbar-defeats").progressbar({
+        value: parseFloat(defeats)
+      });
+      
+      jQuery("#away-team-name-stats").text(awayTeam);
+      jQuery("#away-team-value-stats").text(defeats.toString() + "%");
+      jQuery("#progressbar-defeats").addClass("progressbar-bolao");
+      jQuery("#progressbar-defeats").find(".ui-progressbar-value").addClass("progressbar-bolao-bar");
+      
+    });
+  }
+
   //Events
   jQuery('.save_hint').click(function() {
     
@@ -214,7 +297,30 @@ jQuery(function() {
     
     //console.log("bool do saveHint no evento: ", bool);    
     
-  });  
+  });
+
+  jQuery('.statistics').click(function() {
+
+    var jLabel = jQuery(this);
+    var game_id = jQuery(jLabel.parent().prev().prev().find(':input')[0]).attr('gameid');
+    console.log("GameId: ", game_id);
+
+    sendGameID(game_id);    
+  });
+
+  jQuery("#dialog").dialog({
+    autoOpen: false,
+    height: 220,
+    width: 456,
+    show: {
+      effect: "clip",
+      duration: 300
+    },
+    hide: {
+      effect: "clip",
+      duration: 300
+    }
+  });
 
   setInterval(checkHintStatus, 100000);
 

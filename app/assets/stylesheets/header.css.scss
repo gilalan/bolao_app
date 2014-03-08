@@ -1,6 +1,8 @@
 #header {
-	background: -moz-linear-gradient(top, #0e76bc, #283891);
-	background: -webkit-gradient(linear, left top, left bottom, from(#0e76bc), to(#283891));
+	background: #283891; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0e76bc', endColorstr='#283891'); /* for IE */
+	background: -moz-linear-gradient(top, #0e76bc, #283891); /* for Firefox */
+	background: -webkit-gradient(linear, left top, left bottom, from(#0e76bc), to(#283891)); /* for WebKit browsers */
 	clear: both;
 	height: 105px;
 	z-index: 0;	
@@ -16,7 +18,7 @@
 #header .logo {
 	display: block;
 	margin: 0 auto;
-	background: url('/assets/logo1.png') no-repeat scroll 0 0 transparent;
+	background: url('/assets/logo2.jpg') no-repeat scroll 0 0 transparent;
 	height: 77px;
 	width: 68px;
 }

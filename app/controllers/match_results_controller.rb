@@ -2,11 +2,12 @@ class MatchResultsController < ApplicationController
   # GET /match_results
   # GET /match_results.json
   def index
-    @match_results = MatchResult.all(:order => 'id ASC')
+    
+    @games = Game.all(:order => 'gamedate ASC, gametime ASC')
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @match_results }
+      format.json { render json: @games }
     end
   end
 
@@ -23,7 +24,7 @@ class MatchResultsController < ApplicationController
 
   # GET /match_results/new
   # GET /match_results/new.json
-  def new
+  def new  
     @match_result = MatchResult.new
     @teams = Team.all
 

@@ -1,26 +1,28 @@
 <h2>Ranking</h2>
 <div class="premio">
 	<img src="<%=asset_path('money.png')%>" style="float:left;margin-top:-15px;"/>
-	<label style="padding:10px;">Prêmio: R$<%=@users.count * 10%></label>
+	<label style="padding:10px;">Prêmio: R$<%=User.where("typeof != 1").count * 15%></label>
 </div>
 <div class="ranking_list">
 	<ul>
 		<% position = 1 %>
 		<% @users.each do |user| %>
-		  <li>
-		    <div class="user_position">
-		      <span><%=position%>º</span>
-		    </div>
-		    <div class="user_img_name">
-		    	<% imgpath = "player_#{position}.png" %>
-		        <img src="<%=asset_path(imgpath)%>"/>
-		        <label><%="#{user.name} #{user.lastname}"%></label>
-		    </div>
-		    <div class="user_score">
-		      <label><%=user.score%> pontos</label>
-		    </div>
-		  </li>
-		  <% position+=1 %>
+			<% unless user.typeof == 1 %>
+			  <li>
+			    <div class="user_position">
+			      <span><%=position%>º</span>
+			    </div>
+			    <div class="user_img_name">
+			    	<% imgpath = "player_#{position}.png" %>
+			        <img src="<%=asset_path(imgpath)%>"/>
+			        <label><%="#{user.name} #{user.lastname}"%></label>
+			    </div>
+			    <div class="user_score">
+			      <label><%=user.score%> pts</label>
+			    </div>
+			  </li>
+			  <% position+=1 %>
+			<% end %>
 		<% end %>
 	</ul>
 </div>

@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
       if !current_user.nil?
         user = current_user
         if user.typeof.to_i == User::USER_TYPE[:ADMIN][:id]
-          redirect_to root_path
-          #redirect_to controller: :brands, action: :show, username: user.username
+          #redirect_to root_path
+          redirect_to controller: :admin, action: :index
           #redirecionar para pagina de administrador da app
         else 
           redirect_to controller: :hints, action: :index

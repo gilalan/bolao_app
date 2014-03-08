@@ -19,7 +19,7 @@ class LoginController < ApplicationController
 
 	def do_login
 		return if redirect_if_logged
-		_do_login(User::authenticate(params[:user][:email], params[:user][:password]))
+		_do_login(User::authenticate(params[:user][:email].downcase, params[:user][:password]))
 	end
 
 	def _do_login user

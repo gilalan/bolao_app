@@ -189,14 +189,35 @@ class HintsController < ApplicationController
 
   def calculator
     games = Game.where(:closed => true).where(:finished => true).where(:computed => false)
-    users = User.all
+    users = User.where("typeof != 1")
 
     Calculator::calculate(games, users)
 
     respond_to do |format|
       format.html
     end
+  end  
+
+  def get_statistics    
+
+    users = User.where("typeof != 1")
+    game_id = params[:game_id] if params[:game_id].present?
+    game = Game.find(game_id)
+    Rails.logger.info("Game_id: #{game_id}")
+
+    stats = Calculator::getStatistics(game, users)
+
+    game_mr = game.match_results(:order => "team_id ASC")
+
+    homeTeam = game_mr.first.team.name
+    awayTeam = game_mr.last.team.name
+
+    respond_to do |format|
+      Rails.logger.info('TESTE DE RETORNO DO get_statistics')
+      Rails.logger.info("VARIAVEL #{stats}")
+      format.json { render json: {matches: stats[0], wins: stats[1], draws: stats[2], defeats: stats[3], homeTeam: homeTeam, awayTeam: awayTeam} }
+    end
+
   end
 
 end
-

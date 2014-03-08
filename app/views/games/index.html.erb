@@ -1,11 +1,11 @@
-<h1>Listing games</h1>
+<h1>Listando Jogos</h1>
 
-<table>
+<table class="admin_teams">
   <tr>    
     <th>ID</th>
     <th>Local</th>
-    <th>Gamedate</th>
-    <th>Gametime</th>
+    <th>Data</th>
+    <th>Hora</th>
     <th>Computed</th>
     <th>Finished</th>
     <th>Closed</th>
@@ -16,10 +16,10 @@
 
 <% @games.each do |game| %>
   <tr>
-    <td><%= game.id %></td>
+    <td><i><%= game.id %></i></td>
     <td><%= game.local %></td>
-    <td><%= game.gamedate %></td>
-    <td><%= game.gametime %></td>
+    <td><%=l game.gamedate, :format => :complete%></td>
+    <td><%=l game.gametime, :format => :smallshort%></td>
     <td><%= game.computed %></td>
     <td><%= game.finished %></td>
     <td><%= game.closed %></td>
@@ -32,10 +32,7 @@
 
 <br />
 
-<%= link_to 'New Game', new_game_path %>
+<div class="admin_teams_div">
+  <%= link_to 'New Game', new_game_path %>
+</div>
 
-<style type="text/css">
-  body {
-    background-color: #CCC;
-  }
-</style>

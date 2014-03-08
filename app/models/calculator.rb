@@ -1,6 +1,63 @@
 # encoding: UTF-8
 class Calculator < ActiveRecord::Base
-  
+  	
+  	def self.getStatistics game, users
+  		
+  		#validHintsNumber, winsNumber, drawsNumber, defeatsNumber
+  		stats = [0, 0, 0, 0]
+
+  		users.each do |user|
+			Rails.logger.info("Name: #{user.name}")
+			gameHints = user.hints.where(:game_id => game.id)
+
+			game_mr = game.match_results(:order => "team_id ASC")
+
+			homeTeamId = game_mr.first.team_id
+			awayTeamId = game_mr.last.team_id
+
+			unless gameHints.empty?
+				userHomeHint = gameHints.first.team_id == homeTeamId ? gameHints.first : gameHints.last
+				userAwayHint = gameHints.first.team_id == awayTeamId ? gameHints.first : gameHints.last
+
+
+				userHomeTeamId = userHomeHint.team_id
+				userAwayTeamId = userAwayHint.team_id
+				
+				unless (userHomeHint.goals.nil? && userAwayHint.goals.nil?)
+
+					userHomeGoals = userHomeHint.goals
+					userAwayGoals = userAwayHint.goals
+
+					Rails.logger.info('USER: Home x Away Goals')
+					Rails.logger.info("#{userHomeGoals} x #{userAwayGoals}")
+
+					#Obtem o resultado que o user sugeriu
+					resultOfUserHint = getResult(userHomeGoals, userAwayGoals)
+					Rails.logger.info("Resultado do Palpite: #{resultOfUserHint}")
+
+					stats[0] += 1
+					if resultOfUserHint.eql?('v')
+						stats[1] += 1
+					elsif resultOfUserHint.eql?('e')
+						stats[2] += 1
+					else
+						stats[3] += 1
+					end
+
+				end
+			end
+		end
+
+		#Send % stats
+		unless stats[0] == 0
+			stats[1] = sprintf( '%.2f', (Float(stats[1])/Float(stats[0])).round(2)*100 )
+			stats[2] = sprintf( '%.2f', (Float(stats[2])/Float(stats[0])).round(2)*100 )
+			stats[3] = sprintf( '%.2f', (Float(stats[3])/Float(stats[0])).round(2)*100 )
+		end
+
+		return stats
+  	end
+
 	def self.getResult homeGoals, awayGoals
 		
 		if homeGoals > awayGoals
@@ -48,10 +105,12 @@ class Calculator < ActiveRecord::Base
 		games.each do |game|
 			Rails.logger.info("Game id: #{game.id}")
 
-			homeTeamId = game.match_results.first.team_id
-			homeGoals = game.match_results.first.goals
-			awayTeamId = game.match_results.last.team_id
-			awayGoals = game.match_results.last.goals
+			game_mr = game.match_results(:order => "team_id ASC")
+
+			homeTeamId = game_mr.first.team_id
+			homeGoals = game_mr.first.goals
+			awayTeamId = game_mr.last.team_id
+			awayGoals = game_mr.last.goals
 			Rails.logger.info('MATCH: Home x Away Goals')
 			Rails.logger.info("#{homeGoals} x #{awayGoals}")
 
@@ -70,30 +129,35 @@ class Calculator < ActiveRecord::Base
 							userHomeHint = gameHints.first.team_id == homeTeamId ? gameHints.first : gameHints.last
 							userAwayHint = gameHints.first.team_id == awayTeamId ? gameHints.first : gameHints.last
 
+
 							userHomeTeamId = userHomeHint.team_id
-							userHomeGoals = userHomeHint.goals
 							userAwayTeamId = userAwayHint.team_id
-							userAwayGoals = userAwayHint.goals
-
-							Rails.logger.info('USER: Home x Away Goals')
-							Rails.logger.info("#{userHomeGoals} x #{userAwayGoals}")
 							
-							#Obtem o resultado que o user sugeriu
-							resultOfUserHint = getResult(userHomeGoals, userAwayGoals)
-							Rails.logger.info("Resultado do Palpite: #{resultOfUserHint}")
-							pointsMarked = getPoints(resultOfMatch, resultOfUserHint, homeGoals, userHomeGoals, awayGoals, userAwayGoals)
-							Rails.logger.info("Pontos Marcados: #{pointsMarked}")
+							unless (userHomeHint.goals.nil? && userAwayHint.goals.nil?)
 
-					        userHomeHint.update_attributes(:points => pointsMarked)
-					        userAwayHint.update_attributes(:points => pointsMarked)			   
+								userHomeGoals = userHomeHint.goals
+								userAwayGoals = userAwayHint.goals
 
-					        if user.score.nil?
-					        	user.score = 0
-					        end
-						    user.score += pointsMarked
-						    
-						    user.email_confirmation = user.email.downcase
-						    user.update_attributes(:name => user.name, :lastname => user.lastname, :email => user.email.downcase, :score => user.score)
+								Rails.logger.info('USER: Home x Away Goals')
+								Rails.logger.info("#{userHomeGoals} x #{userAwayGoals}")
+								
+								#Obtem o resultado que o user sugeriu
+								resultOfUserHint = getResult(userHomeGoals, userAwayGoals)
+								Rails.logger.info("Resultado do Palpite: #{resultOfUserHint}")
+								pointsMarked = getPoints(resultOfMatch, resultOfUserHint, homeGoals, userHomeGoals, awayGoals, userAwayGoals)
+								Rails.logger.info("Pontos Marcados: #{pointsMarked}")
+
+						        userHomeHint.update_attributes(:points => pointsMarked)
+						        userAwayHint.update_attributes(:points => pointsMarked)			   
+
+						        if user.score.nil?
+						        	user.score = 0
+						        end
+							    user.score += pointsMarked
+							    
+							    user.email_confirmation = user.email.downcase
+							    user.update_attributes(:name => user.name, :lastname => user.lastname, :email => user.email.downcase, :score => user.score)
+							end
 						end
 					end
 				rescue => e

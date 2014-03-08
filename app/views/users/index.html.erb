@@ -1,12 +1,13 @@
 <h1>Listing users</h1>
 
-<table>
+<table class="admin_teams">
   <tr>
     <th>Name</th>
     <th>Lastname</th>
     <th>Email</th>
     <th>Password</th>
     <th>Score</th>
+    <th>Hints Points (total)</th>
     <th></th>
     <th></th>
     <th></th>
@@ -19,6 +20,13 @@
     <td><%= user.email %></td>
     <td><%= user.password %></td>
     <td><%= user.score %></td>
+    <% unless user.hints.empty? %>
+        <% countHintPoints = 0 %>
+        <% user.hints.each do |hint| %>
+            <% countHintPoints += hint.points unless hint.points.nil? %>
+        <% end %>
+    <% end %>    
+    <td><%= countHintPoints %></td>
     <td><%= link_to 'Show', user %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
     <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -28,4 +36,9 @@
 
 <br />
 
-<%= link_to 'New User', new_user_path %>
+<div class="admin_teams_div">
+    <%= link_to 'New User', new_user_path %>
+    <%= link_to 'Reset All Scores', reset_all_scores_path %>
+    <%= link_to 'Reset All Hints Points', reset_all_hintspoints_path %>
+</div>
+

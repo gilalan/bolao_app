@@ -41,7 +41,6 @@ class UsersController < ApplicationController
   def edit
     
     @user = User.find(params[:id])
-    Rails.logger.info("****************** Pass Confirmation? ************************")
     @user.email_confirmation = params[:email_confirmation] unless params[:email_confirmation].nil?
     
     respond_to do |format|
@@ -60,9 +59,7 @@ class UsersController < ApplicationController
       return render action: :new
     end
 
-    @user = User.new(:name => params[:user][:name], :lastname => params[:user][:lastname], :email => params[:user][:email].downcase, :password => params[:user][:password], :typeof => 2, :score => 0)
-
-    Rails.logger.info(@user.to_yaml)
+    @user = User.new(:name => params[:user][:name], :lastname => params[:user][:lastname], :email => params[:user][:email].downcase, :password => params[:user][:password], :typeof => 2, :score => 0)    
 
     respond_to do |format|
            
@@ -116,4 +113,44 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def reset_score
+    @user = User.find(params[:id])
+      
+    @user.email_confirmation = @user.email.downcase
+    @user.update_attributes(:name => @user.name, :lastname => @user.lastname, :email => @user.email.downcase, :score => 0)
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def reset_all_scores
+    users = User.all
+
+    users.each do |user|
+      user.email_confirmation = user.email.downcase
+      user.update_attributes(:name => user.name, :lastname => user.lastname, :email => user.email.downcase, :score => 0)      
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def reset_all_hintspoints
+    users = User.all(:include => :hints)
+
+    users.each do |user|
+      hints = user.hints
+      hints.each do |hint|
+        hint.update_attributes(:points => 0)
+      end
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
 end

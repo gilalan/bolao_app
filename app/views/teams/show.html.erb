@@ -7,9 +7,11 @@
 
 <p>
   <b>Logotipo:</b>
-  <%= @team.logotipo %>
+  <img src="<%=asset_path(@team.logotipo.to_s)%>"/>
 </p>
 
-
-<%= link_to 'Edit', edit_team_path(@team) %> |
-<%= link_to 'Back', teams_path %>
+<div class="admin_teams_div">
+	<%= link_to 'Edit', edit_team_path(@team) %> |
+	<%= link_to 'Back', teams_path %> | 
+	<%= link_to 'All Teams', teams_path %>
+</div>

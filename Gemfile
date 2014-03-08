@@ -10,6 +10,7 @@ gem 'pg'
 gem 'whenever'
 gem "authlogic"
 gem 'capistrano'
+gem 'rails_12factor', group: :production
 
 # Gems used only for assets and not required
 # in production environments by default.

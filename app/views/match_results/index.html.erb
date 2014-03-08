@@ -1,33 +1,63 @@
-<h1>Listing match_results</h1>
+<h1>Listando Confrontos</h1>
 
-<table>
+<table class="admin_teams">
   <tr>
-    <th>Game</th>
-    <th>Team</th>
-    <th>Goals</th>
+    <th>Jogo</th>
+    <th>Time</th>
+    <th>Gols</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
 
-<% @match_results.each do |match_result| %>
-  <tr>
-    <td><%= match_result.game_id %></td>
-    <td><%= match_result.team_id %></td>
-    <td><%= match_result.goals %></td>
-    <td><%= link_to 'Show', match_result %></td>
-    <td><%= link_to 'Edit', edit_match_result_path(match_result) %></td>
-    <td><%= link_to 'Destroy', match_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<% @games.each do |game| %>
+  
+  <% if game.match_results.empty? %>
+    <tr>
+      <td><%= game.id %></td>
+      <td> Não há confronto definido </td>
+      <td> <%= link_to 'Criar Primeira Parte do Confronto', new_match_result_path %> </td>
+    </tr>
+  <% end %>
+
+  <% if !game.match_results.empty? %>
+
+    <% game_mr = game.match_results(:order => "team_id ASC") %>
+      
+      <% if game_mr.count == 1 %>  
+        <td><%= game.id %></td>
+        <td><%= game_mr.first.team.name %></td>
+        <td><%= game_mr.first.goals %></td>
+        <td> <%= link_to 'Criar Segunda Parte do Confronto', new_match_result_path %> </td>
+      <% end %>
+
+      <% if game_mr.count > 1 %>    
+        <tr>
+          <td><%= game_mr.first.game_id %></td>
+          <td><%= game_mr.first.team.name %></td>
+          <td><%= game_mr.first.goals %></td>
+          <td><%= link_to 'Show', game_mr.first %></td>
+          <td><%= link_to 'Edit', edit_match_result_path(game_mr.first) %></td>
+          <td><%= link_to 'Destroy', game_mr.first, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr> 
+
+         <tr>
+          <td><%= game_mr.last.game_id %></td>
+          <td><%= game_mr.last.team.name %></td>
+          <td><%= game_mr.last.goals %></td>
+          <td><%= link_to 'Show', game_mr.last %></td>
+          <td><%= link_to 'Edit', edit_match_result_path(game_mr.last) %></td>
+          <td><%= link_to 'Destroy', game_mr.last, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+
+  <% end %> 
+
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Match result', new_match_result_path %>
-
-<style type="text/css">
-  body {
-    background-color: #CCC;
-  }
-</style>
+<div class="admin_teams_div">
+  <%= link_to 'New Match result', new_match_result_path %>
+</div>
